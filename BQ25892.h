@@ -190,6 +190,8 @@ public:
     char pnc;
     char* pn[8];
 
+    bool reset();
+
     int ChgEnable();
     int ChgDisable();
 

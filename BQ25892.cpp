@@ -66,14 +66,17 @@ bool BQ25892::checkBit(char regAddr, int bit)
     return set;
 }
 
+bool BQ25892::reset()
+{
+    return (setBit(REG_RST_REG, REG_RST_BIT) == 0);
+}
+
 int BQ25892::ChgEnable()
 {
-    char regAddr = 0x03;
-    return setBit(regAddr, 4);
+    return setBit(CHG_CONFIG_REG, CHG_CONFIG_BIT);
 }
 
 int BQ25892::ChgDisable()
 {
-    char regAddr = 0x03;
-    return clearBit(regAddr, 4);
+    return clearBit(CHG_CONFIG_REG, CHG_CONFIG_BIT);
 }
