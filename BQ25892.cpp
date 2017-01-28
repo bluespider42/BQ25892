@@ -6,9 +6,9 @@
 BQ25892::BQ25892(PinName sda, PinName scl) : i2c_(sda, scl)
 {
     // Setup
-    rev = ReadByte(DEV_REV_REG) & DEV_REV_BIT;
+    rev = ReadByte(DEV_REV_REG) & DEV_REV_BIT; // Revision Number
     char pnc = ReadByte(PN_REG) & PN_BIT;
-    //pnc = pnc << 3;
+    // Extract Part Number
     switch (pnc) {
         case 0x18:
             pn[8] = "BQ25890";
