@@ -188,20 +188,22 @@ public:
 
     char rev;
     char pnc;
-    char* pn[8];
+    char pn[8];
 
     bool reset();
+    bool powerOff();
 
     int ChgEnable();
     int ChgDisable();
 
+    char ReadByte(char regAddr);
+
 private:
     I2C i2c_;
-    char ReadByte(char regAddr);
     int WriteByte(char regAddr, char data);
-    int setBit(char regAddr, int bit);
-    int clearBit(char regAddr, int bit);
-    bool checkBit(char regAddr, int bit);
+    int setBit(char regAddr, char bitmask);
+    int clearBit(char regAddr, char bitmask);
+    char checkBit(char regAddr, char bitmask);
 };
 
 #endif /* __BQ25892_H__ */
