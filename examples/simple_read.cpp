@@ -23,7 +23,6 @@ int main() {
 
     serial1.printf("Part Number: %s\n", bq.pn);
     serial1.printf("Revision Number: %i\n", bq.rev);
-    serial1.printf("pnc: %02X\n", bq.pnc);
 
     char cmd[1];
     char data;
@@ -32,9 +31,6 @@ int main() {
 
     // Loop
     while (1) {
-
-        //bq.powerOff();
-        wait(20);
 
         data = bq.ReadByte(cmd[0]);
 

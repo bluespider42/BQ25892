@@ -187,7 +187,6 @@ public:
     ~BQ25892();
 
     char rev;
-    char pnc;
     char pn[8];
 
     bool reset();
@@ -204,6 +203,8 @@ private:
     int setBit(char regAddr, char bitmask);
     int clearBit(char regAddr, char bitmask);
     char checkBit(char regAddr, char bitmask);
+
+    char pnc;
 };
 
 #endif /* __BQ25892_H__ */
