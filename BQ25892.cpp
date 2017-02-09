@@ -84,13 +84,12 @@ char BQ25892::checkBit(char regAddr, char bitmask)
 
 char BQ25892::posBit(char bitmask)
 {
-    char bitmask;      // 32-bit word input to count zero bits on right
     char c = 8; // c will be the number of zero bits on the right
-    v &= -signed(v);
-    if (v) c--;
-    if (v & 0x0F) c -= 4;
-    if (v & 0x33) c -= 2;
-    if (v & 0x55) c -= 1;
+    bitmask &= -signed(bitmask);
+    if (bitmask) c--;
+    if (bitmask & 0x0F) c -= 4;
+    if (bitmask & 0x33) c -= 2;
+    if (bitmask & 0x55) c -= 1;
 
     return c;
 }
@@ -139,6 +138,18 @@ int BQ25892::setIchg(int lim) //max charge current 0-5056mA
         lim = 0;
     }
     char limBits = (lim/64);
+    return setByte(ICHG_REG, ICHG_BIT, limBits);
+}
+
+int BQ25892::setIterm(int lim) //termination current 64-1024mA
+{
+    if(lim > 1024){
+        lim = 1024;
+    }
+    if(lim < 64){
+        lim = 64;
+    }
+    char limBits = ((lim-64)/64);
     return setByte(ICHG_REG, ICHG_BIT, limBits);
 }
 

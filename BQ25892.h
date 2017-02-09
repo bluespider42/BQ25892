@@ -198,8 +198,9 @@ public:
     int ADCstart();
     int ADCenable();
 
-
     int setIinLim(int lim); //acceptable values 100-3250 (mA)
+    int setIchg(int lim); //acceptable 0-5056mA
+    int setIterm(int lim); //acceptable values 64-1024mA
 
     char ReadByte(char regAddr);
     char checkBit(char regAddr, char bitmask);
@@ -211,7 +212,7 @@ private:
     int clearBit(char regAddr, char bitmask);
 
     int setByte(char regAddr, char bitmask, char bits);
-
+    char posBit(char bitmask);
 
     char pnc;
 };
