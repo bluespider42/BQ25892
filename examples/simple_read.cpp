@@ -28,19 +28,34 @@ int main() {
     char data;
 
     cmd[0] = 0x00;
+    int IinLim = 50;
+    char AcLim;
 
     // Loop
     while (1) {
 
-        data = bq.ReadByte(cmd[0]);
+        bq.setIinLim(IinLim);
+        wait(1);
+        AcLim = bq.checkBit(IINLIM_REG, IINLIM_BIT);
 
-        serial1.printf("Reg:%02X  - Data: %02X \n", cmd[0], data);
-        wait(10);
-        cmd[0] = cmd[0] + 0x01;
-        if(cmd[0] == 0x15){
-            cmd[0] = 0x00;
-            bq.powerOff();
+        serial1.printf("Input Current Limit %i -> %imA\n", IinLim, AcLim*50+100);
+
+        wait(2);
+        IinLim += 10;
+
+        if(IinLim > 3250){
+            IinLim = 90;
         }
+
+        // data = bq.ReadByte(cmd[0]);
+        //
+        // serial1.printf("Reg:%02X  - Data: %02X \n", cmd[0], data);
+        // wait(10);
+        // cmd[0] = cmd[0] + 0x01;
+        // if(cmd[0] == 0x15){
+        //     cmd[0] = 0x00;
+        //     bq.powerOff();
+        // }
 
     }
 

@@ -195,14 +195,23 @@ public:
     int ChgEnable();
     int ChgDisable();
 
+    int ADCstart();
+    int ADCenable();
+
+
+    int setIinLim(int lim); //acceptable values 100-3250 (mA)
+
     char ReadByte(char regAddr);
+    char checkBit(char regAddr, char bitmask);
 
 private:
     I2C i2c_;
     int WriteByte(char regAddr, char data);
-    int setBit(char regAddr, char bitmask);
+    int setBit(char regAddr, char bits);
     int clearBit(char regAddr, char bitmask);
-    char checkBit(char regAddr, char bitmask);
+
+    int setByte(char regAddr, char bitmask, char bits);
+
 
     char pnc;
 };

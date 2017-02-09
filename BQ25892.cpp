@@ -54,10 +54,17 @@ int BQ25892::WriteByte(char regAddr, char data)
     return ack | i2c_.write(ADDR, tx, 2);
 }
 
-int BQ25892::setBit(char regAddr, char bitmask)
+int BQ25892::setBit(char regAddr, char bits)
 {
     char reg = ReadByte(regAddr);
-    reg |= bitmask;
+    reg |= bits;
+    return WriteByte(regAddr, reg);
+}
+
+int BQ25892::setByte(char regAddr, char bitmask, char bits)
+{
+    char reg = ReadByte(regAddr);
+    reg = reg ^ ((reg ^ bits) & bitmask);
     return WriteByte(regAddr, reg);
 }
 
@@ -71,8 +78,21 @@ int BQ25892::clearBit(char regAddr, char bitmask)
 char BQ25892::checkBit(char regAddr, char bitmask)
 {
     char reg = ReadByte(regAddr);
-    bool set = reg & bitmask;
-    return set;
+    reg &= bitmask;
+    return reg;
+}
+
+char BQ25892::posBit(char bitmask)
+{
+    char bitmask;      // 32-bit word input to count zero bits on right
+    char c = 8; // c will be the number of zero bits on the right
+    v &= -signed(v);
+    if (v) c--;
+    if (v & 0x0F) c -= 4;
+    if (v & 0x33) c -= 2;
+    if (v & 0x55) c -= 1;
+
+    return c;
 }
 
 bool BQ25892::reset()
@@ -96,4 +116,38 @@ int BQ25892::ChgEnable()
 int BQ25892::ChgDisable()
 {
     return clearBit(CHG_CONFIG_REG, CHG_CONFIG_BIT);
+}
+
+int BQ25892::setIinLim(int lim) //acceptable values 100-3250 (mA)
+{
+    if(lim > 3250){
+        lim = 3250;
+    }
+    if(lim < 100){
+        lim = 100;
+    }
+    char limBits = ((lim-100)/50);
+    return setByte(IINLIM_REG, IINLIM_BIT, limBits);
+}
+
+int BQ25892::setIchg(int lim) //max charge current 0-5056mA
+{
+    if(lim > 5056){
+        lim = 5056;
+    }
+    if(lim < 0){
+        lim = 0;
+    }
+    char limBits = (lim/64);
+    return setByte(ICHG_REG, ICHG_BIT, limBits);
+}
+
+int BQ25892::ADCstart()
+{
+    return setBit(CONV_START_REG, CONV_START_BIT);
+}
+
+int BQ25892::ADCenable()
+{
+    return setBit(CONV_RATE_REG, CONV_RATE_BIT);
 }
